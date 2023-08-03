@@ -1,3 +1,5 @@
+#define USE_NIMBLE
+
 #include <Arduino.h>
 #include <BleKeyboard.h>
 
