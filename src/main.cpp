@@ -10,7 +10,7 @@ void press(uint8_t button);
 
 const int BUTTON_UP = 13;
 const int BUTTON_DOWN = 15;
-const int DELAY = 100;
+const int DELAY = 300;
 
 int buttonState = 0;
 
