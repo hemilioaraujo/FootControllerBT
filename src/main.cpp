@@ -14,11 +14,14 @@ const int BUTTON_UP = 13;
 const int BUTTON_DOWN = 15;
 const int LED_CONN = 16;
 const int DELAY = 300;
+const long INTERVAL = 1000;
 
-const char DEVICE_NAME[12]="PAGE_TURNER";
-const char DEVELOPER[5]="HLAM";
+const char DEVICE_NAME[12] = "PAGE_TURNER";
+const char DEVELOPER[5] = "HLAM";
 
 int buttonState = 0;
+unsigned long previousMillis = 0;
+unsigned long currentMillis = 0;
 
 BleKeyboard bleKeyboard(DEVICE_NAME, DEVELOPER, 100);
 
@@ -27,16 +30,16 @@ void setup()
     pinMode(BUTTON_RESET, INPUT);
     pinMode(BUTTON_UP, INPUT);
     pinMode(BUTTON_DOWN, INPUT);
-    pinMode(LED_BUILTIN, OUTPUT);
     pinMode(LED_CONN, OUTPUT);
 
     Serial.begin(115200);
-    Serial.println("Starting !");
+    Serial.printf("Starting %s\n", DEVICE_NAME);
     bleKeyboard.begin();
 }
 
 void loop()
 {
+    currentMillis = millis();
     buttonState = 0;
 
     buttonState = digitalRead(BUTTON_RESET);
@@ -66,7 +69,11 @@ void loop()
     }
     else
     {
-        digitalWrite(LED_CONN, LOW);
+        if (currentMillis - previousMillis >= INTERVAL)
+        {
+            previousMillis = currentMillis;
+            digitalWrite(LED_CONN, !digitalRead(LED_CONN));
+        }
     }
 }
 
