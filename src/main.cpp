@@ -22,6 +22,7 @@ const char DEVELOPER[5] = "HLAM";
 int buttonState = 0;
 unsigned long previousMillis = 0;
 unsigned long currentMillis = 0;
+bool connectionStatus = false;
 
 BleKeyboard bleKeyboard(DEVICE_NAME, DEVELOPER, 100);
 
@@ -51,6 +52,12 @@ void loop()
 
     if (bleKeyboard.isConnected())
     {
+        if (!connectionStatus)
+        {
+            connectionStatus = true;
+            Serial.println("Connected");
+        }
+
         digitalWrite(LED_CONN, HIGH);
 
         buttonState = digitalRead(BUTTON_UP);
@@ -69,6 +76,12 @@ void loop()
     }
     else
     {
+        if (connectionStatus)
+        {
+            connectionStatus = false;
+            Serial.println("Disconnected");
+        }
+
         if (currentMillis - previousMillis >= INTERVAL)
         {
             previousMillis = currentMillis;
